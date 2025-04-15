@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_GATEWAY_URL } from '$env/static/public';
   import { fade } from 'svelte/transition';
   import { onMount } from 'svelte';
   import CryptoJS from 'crypto-js';
@@ -21,7 +22,7 @@
   });
 
   function startSignaling() {
-    signaling = new WebSocket(`ws://localhost:8765/${sessionId}`);
+    signaling = new WebSocket(`${PUBLIC_GATEWAY_URL}/${sessionId}`);
     peer = new RTCPeerConnection({
       iceServers: [
         {

@@ -1,7 +1,7 @@
 import { WebSocketServer } from 'ws';
 
-const wss = new WebSocketServer({ port: 8765 });
-console.log('🚀 Signaling server running on ws://localhost:8765');
+const wss = new WebSocketServer({ port: 4562 });
+console.log('🚀 Signaling server running on ws://localhost:4562');
 
 const sessions = {}; // sessionId: { sender, receiver, offer, answer, candidates: [] }
 
