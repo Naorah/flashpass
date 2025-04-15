@@ -1,23 +1,29 @@
 <script>
   import { fade, fly } from 'svelte/transition';
+  import { enhance } from '$app/forms';
   import { onMount } from 'svelte';
   
   let visible = $state(false);
+  let nameCount = $state(0);
+  let emailCount = $state(0); 
+  let messageCount = $state(0);
   let formSubmitted = $state(false);
+
   let formData = $state({
     name: '',
     email: '',
     message: ''
   });
+
+  $effect(() => {
+    nameCount = formData.name.length;
+    emailCount = formData.email.length;
+    messageCount = formData.message.length;
+  });
   
   onMount(() => {
     visible = true;
   });
-  
-  function handleSubmit() {
-    // Simulation d'une soumission réussie
-    formSubmitted = true;
-  }
 </script>
 
 <div class="bg-gray-50 min-h-screen">
@@ -56,16 +62,30 @@
           </div>
         {/if}
         
-        <form on:submit|preventDefault={handleSubmit} class="space-y-6">
+        <form method="POST" class="space-y-6" use:enhance={() => {
+          return async ({ result, update }) => {
+            console.log(result);
+            if (result.type === 'success') {
+              formSubmitted = true;
+              update();
+            }
+          }
+        }}>
           <div>
             <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
             <input 
               type="text" 
-              id="name" 
+              id="name"
+              name="name"
               bind:value={formData.name} 
+              maxlength="20"
               required
               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             >
+            <div class="text-sm text-gray-500 mt-1 flex justify-between">
+              <span>Maximum 20 caractères</span>
+              <span class={nameCount > 20 ? "text-red-500" : ""}>{nameCount}/20</span>
+            </div>
           </div>
           
           <div>
@@ -73,27 +93,40 @@
             <input 
               type="email" 
               id="email" 
-              bind:value={formData.email} 
+              name="email"
+              bind:value={formData.email}
+              maxlength="40" 
               required
               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             >
+            <div class="text-sm text-gray-500 mt-1 flex justify-between">
+              <span>Maximum 40 caractères</span>
+              <span class={emailCount > 40 ? "text-red-500" : ""}>{emailCount}/40</span>
+            </div>
           </div>
           
           <div>
             <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
             <textarea 
               id="message" 
-              bind:value={formData.message} 
+              name="message"
+              bind:value={formData.message}
+              maxlength="250"
               required
               rows="4"
               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             ></textarea>
+            <div class="text-sm text-gray-500 mt-1 flex justify-between">
+              <span>Maximum 250 caractères</span>
+              <span class={messageCount > 250 ? "text-red-500" : ""}>{messageCount}/250</span>
+            </div>
           </div>
           
           <div>
             <button 
               type="submit" 
               class="w-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              disabled={nameCount > 20 || emailCount > 40 || messageCount > 250}
             >
               Envoyer
             </button>
