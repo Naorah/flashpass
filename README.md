@@ -4,19 +4,19 @@
 
 # FlashPass
 
-FlashPass est une application web permettant de partager des mots de passe de manière sécurisée et éphémère via une connexion P2P.
+FlashPass is a web application that allows you to share passwords securely and ephemerally through a P2P connection.
 
-## Fonctionnalités
+## Features
 
-- Chiffrement de bout en bout des mots de passe
-- Connexion P2P directe entre l'émetteur et le récepteur
-- Destruction automatique après lecture
-- Interface simple et intuitive
-- Aucune donnée stockée sur les serveurs
+- End-to-end password encryption
+- Direct P2P connection between sender and receiver
+- Automatic destruction after reading
+- Simple and intuitive interface
+- No data stored on servers
 
 ## Technologies
 
-- SvelteKit - Framework web
-- WebRTC - Communication P2P
-- CryptoJS - Chiffrement des données
-- TailwindCSS - Styles et composants UI
+- SvelteKit - Web framework
+- WebRTC - P2P communication
+- CryptoJS - Data encryption
+- TailwindCSS - UI styles and components
