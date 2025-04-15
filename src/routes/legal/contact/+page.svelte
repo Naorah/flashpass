@@ -63,7 +63,6 @@
         {:else}
           <form method="POST" class="space-y-6" use:enhance={() => {
             return async ({ result, update }) => {
-              console.log(result);
               if (result.type === 'success') {
                 formSubmitted = true;
                 update();
