@@ -58,80 +58,81 @@
         
         {#if formSubmitted}
           <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" in:fade>
-            <p>Merci pour votre message ! Nous vous répondrons dans les plus brefs délais.</p>
+            <p>Merci pour votre message ! Tout a été envoyé avec succès !</p>
           </div>
+        {:else}
+          <form method="POST" class="space-y-6" use:enhance={() => {
+            return async ({ result, update }) => {
+              console.log(result);
+              if (result.type === 'success') {
+                formSubmitted = true;
+                update();
+              }
+            }
+          }}>
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+              <input 
+                type="text" 
+                id="name"
+                name="name"
+                bind:value={formData.name} 
+                maxlength="20"
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              >
+              <div class="text-sm text-gray-500 mt-1 flex justify-between">
+                <span>Maximum 20 caractères</span>
+                <span class={nameCount > 20 ? "text-red-500" : ""}>{nameCount}/20</span>
+              </div>
+            </div>
+            
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email"
+                bind:value={formData.email}
+                maxlength="40" 
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              >
+              <div class="text-sm text-gray-500 mt-1 flex justify-between">
+                <span>Maximum 40 caractères</span>
+                <span class={emailCount > 40 ? "text-red-500" : ""}>{emailCount}/40</span>
+              </div>
+            </div>
+            
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+              <textarea 
+                id="message" 
+                name="message"
+                bind:value={formData.message}
+                maxlength="250"
+                required
+                rows="4"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              ></textarea>
+              <div class="text-sm text-gray-500 mt-1 flex justify-between">
+                <span>Maximum 250 caractères</span>
+                <span class={messageCount > 250 ? "text-red-500" : ""}>{messageCount}/250</span>
+              </div>
+            </div>
+            
+            <div>
+              <button 
+                type="submit" 
+                class="w-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                disabled={nameCount > 20 || emailCount > 40 || messageCount > 250}
+              >
+                Envoyer
+              </button>
+            </div>
+          </form>
         {/if}
         
-        <form method="POST" class="space-y-6" use:enhance={() => {
-          return async ({ result, update }) => {
-            console.log(result);
-            if (result.type === 'success') {
-              formSubmitted = true;
-              update();
-            }
-          }
-        }}>
-          <div>
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
-            <input 
-              type="text" 
-              id="name"
-              name="name"
-              bind:value={formData.name} 
-              maxlength="20"
-              required
-              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            >
-            <div class="text-sm text-gray-500 mt-1 flex justify-between">
-              <span>Maximum 20 caractères</span>
-              <span class={nameCount > 20 ? "text-red-500" : ""}>{nameCount}/20</span>
-            </div>
-          </div>
-          
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              name="email"
-              bind:value={formData.email}
-              maxlength="40" 
-              required
-              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            >
-            <div class="text-sm text-gray-500 mt-1 flex justify-between">
-              <span>Maximum 40 caractères</span>
-              <span class={emailCount > 40 ? "text-red-500" : ""}>{emailCount}/40</span>
-            </div>
-          </div>
-          
-          <div>
-            <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
-            <textarea 
-              id="message" 
-              name="message"
-              bind:value={formData.message}
-              maxlength="250"
-              required
-              rows="4"
-              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            ></textarea>
-            <div class="text-sm text-gray-500 mt-1 flex justify-between">
-              <span>Maximum 250 caractères</span>
-              <span class={messageCount > 250 ? "text-red-500" : ""}>{messageCount}/250</span>
-            </div>
-          </div>
-          
-          <div>
-            <button 
-              type="submit" 
-              class="w-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              disabled={nameCount > 20 || emailCount > 40 || messageCount > 250}
-            >
-              Envoyer
-            </button>
-          </div>
-        </form>
       </div>
       
       <div class="mt-16 bg-white rounded-xl shadow-md p-8" in:fly={{ y: 20, duration: 400, delay: 400 }}>
