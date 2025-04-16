@@ -33,7 +33,7 @@
           for (let i = 0; i < burstCount; i++) {
             setTimeout(() => {
               triggerFlash();
-            }, Math.random() * 200);
+            }, Math.random() * 700);
           }
         };
         loop();
