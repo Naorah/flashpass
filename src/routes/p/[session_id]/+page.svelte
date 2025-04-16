@@ -5,11 +5,11 @@
   import CryptoJS from 'crypto-js';
 
   let {data} = $props();
-  let sessionId = data.sessionId;
+  let session_id = data.session_id;
   let status = $state({status: 'pending', message: 'Connexion à l\'envoyeur...'});
-  let receivedMessage = $state('');
+  let received_message = $state('');
   let copied = $state(false);
-  let sharedKey = $state('');
+  let shared_key = $state('');
 
   let signaling = $state(null);
   let peer = $state(null);
@@ -17,12 +17,12 @@
 
   onMount(() => {
     const fragment = window.location.hash;
-    sharedKey = fragment ? fragment.substring(1) : null;
+    shared_key = fragment ? fragment.substring(1) : null;
     startSignaling();
   });
 
   function startSignaling() {
-    signaling = new WebSocket(`${PUBLIC_GATEWAY_URL}/${sessionId}`);
+    signaling = new WebSocket(`${PUBLIC_GATEWAY_URL}/${session_id}`);
     peer = new RTCPeerConnection({
       iceServers: [
         {
@@ -41,11 +41,11 @@
       channel.onmessage = (event) => {
         const data = JSON.parse(event.data);
 
-        if (data.session && data.type && data.type === 'send-flash' && data.session === sessionId) {
+        if (data.session && data.type && data.type === 'send-flash' && data.session === session_id) {
           const sent_flash = data.message;
-          const bytes = CryptoJS.AES.decrypt(sent_flash, sharedKey);
-          const originalText = bytes.toString(CryptoJS.enc.Utf8);
-          receivedMessage = originalText;
+          const bytes = CryptoJS.AES.decrypt(sent_flash, shared_key);
+          const original_text = bytes.toString(CryptoJS.enc.Utf8);
+          received_message = original_text;
           status = {status: 'connected', message: 'Mot de passe reçu !'};
         }
       }
@@ -55,7 +55,7 @@
       if (event.candidate) {
         signaling.send(JSON.stringify({
           type: 'ice',
-          session: sessionId,
+          session: session_id,
           candidate: event.candidate  
         }));
       }
@@ -70,7 +70,7 @@
         await peer.setLocalDescription(answer);
         signaling.send(JSON.stringify({
           type: 'answer',
-          session: sessionId,
+          session: session_id,
           sdp: answer
         }));
       }
@@ -90,7 +90,7 @@
     if (channel) {
       channel.send(JSON.stringify({
         type: type,
-        session: sessionId,
+        session: session_id,
         message: message
       }));
     } else {
@@ -131,7 +131,7 @@
           <p class="text-center text-sm text-green-600 animate-pulse">{status.message}</p>
         {/if}
 
-        {#if !receivedMessage}
+        {#if !received_message}
           <button 
             onclick={() => sendP2PData('get-flash', "")}
             class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center space-x-2"
@@ -155,12 +155,12 @@
               <input 
                 type="text" 
                 readonly
-                value={receivedMessage}
+                value={received_message}
                 class="flex-grow bg-white border border-gray-300 rounded-l-md px-3 py-2 text-sm font-mono truncate"
               />
               <button 
                 onclick={() => {
-                  navigator.clipboard.writeText(receivedMessage);
+                  navigator.clipboard.writeText(received_message);
                   copied = true;
                   setTimeout(() => { copied = false; }, 2000);
                 }}

@@ -6,20 +6,20 @@
 
   let text_to_transmit = $state('');
   let copied = $state(false);
-  let isGenerating = $state(false);
-  let sessionId = $state('');
-  let sharedKey = $state('');
+  let is_generating = $state(false);
+  let session_id = $state('');
+  let shared_key = $state('');
   let link = $state('');
   let status = $state({status: 'pending', message: 'En attente de connexion...'});
 
   async function sendPassword() {
-    isGenerating = true;
+    is_generating = true;
     link = '';
-    sessionId = crypto.randomUUID();
-    sharedKey = crypto.randomUUID();
+    session_id = crypto.randomUUID();
+    shared_key = crypto.randomUUID();
     startSignaling();
-    link = `${location.origin}/p/${sessionId}#${sharedKey}`;
-    isGenerating = false;
+    link = `${location.origin}/p/${session_id}#${shared_key}`;
+    is_generating = false;
   }
 
   function copyToClipboard() {
@@ -42,7 +42,7 @@
   let channel = $state(null);
 
   async function startSignaling() {
-    signaling = new WebSocket(`${PUBLIC_GATEWAY_URL}/${sessionId}`);
+    signaling = new WebSocket(`${PUBLIC_GATEWAY_URL}/${session_id}`);
   
     peer = new RTCPeerConnection({
       iceServers: [
@@ -62,7 +62,7 @@
       if (event.candidate) {
         signaling.send(JSON.stringify({
           type: 'ice',
-          session: sessionId,
+          session: session_id,
           candidate: event.candidate
         }));
       }
@@ -78,7 +78,7 @@
       
       signaling.send(JSON.stringify({
         type: 'offer',
-        session: sessionId,
+        session: session_id,
         sdp: offer
       }));
       status = {status: 'connected', message: 'Prêt à envoyer le mot de passe !'}
@@ -119,12 +119,12 @@
     channel.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
-      if (data.session && data.type && data.type === 'get-flash' && data.session === sessionId) {
+      if (data.session && data.type && data.type === 'get-flash' && data.session === session_id) {
         status = {status: 'connected', message: 'Mot de passe transmis !'}
-        const encryptedMessage = CryptoJS.AES.encrypt(text_to_transmit, sharedKey).toString();
+        const encryptedMessage = CryptoJS.AES.encrypt(text_to_transmit, shared_key).toString();
         channel.send(JSON.stringify({
           type: 'send-flash',
-          session: sessionId,
+          session: session_id,
           message: encryptedMessage
         }));
       }
@@ -173,9 +173,9 @@
         <button 
           onclick={sendPassword} 
           class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center space-x-2"
-          disabled={isGenerating}
+          disabled={is_generating}
         >
-          {#if isGenerating}
+          {#if is_generating}
             <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

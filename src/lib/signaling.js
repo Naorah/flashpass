@@ -3,17 +3,17 @@ import { WebSocketServer } from 'ws';
 const wss = new WebSocketServer({ port: 4562 });
 console.log('🚀 Signaling server running on ws://localhost:4562');
 
-const sessions = {}; // sessionId: { sender, receiver, offer, answer, candidates: [] }
+const sessions = {}; // session_id: { sender, receiver, offer, answer, candidates: [] }
 
 wss.on('connection', (ws, req) => {
   const url = req.url;
-  const sessionId = url.slice(1); // /abc123 => abc123
+  const session_id = url.slice(1); // /abc123 => abc123
 
-  if (!sessions[sessionId]) {
-    sessions[sessionId] = { candidates: [] };
+  if (!sessions[session_id]) {
+    sessions[session_id] = { candidates: [] };
   }
 
-  const session = sessions[sessionId];
+  const session = sessions[session_id];
 
   // Détermine si c'est le sender ou le receiver
   if (!session.sender) {

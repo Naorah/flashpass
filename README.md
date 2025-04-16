@@ -19,7 +19,7 @@
   <p align="center">
     A secure P2P solution for sharing sensitive data without leaving traces
     <br />
-    <a href="https://github.com/Naorah/flashpass/doc"><strong>Read the docs »</strong></a>
+    <a href="https://github.com/Naorah/flashpass/docs"><strong>Read the docs »</strong></a>
     <br />
     <br />
     <a href="https://flashpass.pelsy.net" class="demo-btn">Try Demo</a>
@@ -137,7 +137,7 @@ To run FlashPass locally, follow these steps:
 3. Share the generated link with the recipient
 4. Data is automatically destroyed after being read
 
-For detailed examples and API documentation, please refer to the [Documentation](https://github.com/Naorah/flashpass/doc)
+For detailed examples and API documentation, please refer to the [Documentation](https://github.com/Naorah/flashpass/docs)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
