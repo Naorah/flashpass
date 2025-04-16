@@ -8,6 +8,7 @@
 		<meta name="description" content="Partagez vos mots de passe de façon sécurisée grâce au chiffrement et une connexion P2P, sans serveur intermédiaire." />
 		<meta name="keywords" content="flash, password, send, receive, secure, p2p, crypto, encryption, decryption, password manager, password sharing, password storage, flashpass, mot de passe, partage sécurisé, p2p, chiffrement, transmission, sécurité, mot de passe temporaire, envoi sécurisé" />
 		<meta name="author" content="Lov3boX" />
+		<meta name="theme-color" content="#025B9F">
 
 		<meta property="og:title" content="Flashpass" />
 		<meta property="og:description" content="Partagez vos mots de passe de façon sécurisée grâce au chiffrement et une connexion P2P, sans serveur intermédiaire." />
@@ -19,14 +20,17 @@
 		<link rel="icon" href="https://flashpass.pelsy.net/favicon.png" />
 		<link rel="apple-touch-icon" href="https://flashpass.pelsy.net/favicon.png" />
 		<link rel="manifest" href="https://flashpass.pelsy.net/manifest.json" />
-
 		<!-- ######### -->
 		<!-- META DATA -->
 		<!-- ######### -->
-		
-
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<title>Flashpass</title>
+
+		<script>
+			const theme = localStorage.getItem('theme') || 'light';
+			document.documentElement.classList.toggle('dark', theme === 'dark');
+		</script>
+
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
 	</head>

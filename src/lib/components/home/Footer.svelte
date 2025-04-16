@@ -1,23 +1,39 @@
+<script>
+  import { _ } from '$lib/lang/i18n';
+</script>
+
 <!-- Footer -->
 <footer class="bg-gray-900 text-gray-400 py-12">
   <div class="container max-w-6xl mx-auto px-4">
     <div class="flex flex-col md:flex-row justify-between items-center mb-8">
       <div class="mb-6 md:mb-0">
-        <h2 class="text-2xl font-bold text-white mb-2">FlashPass</h2>
-        <p class="text-sm">Partage sécurisé et éphémère</p>
+        <h2 class="text-2xl font-bold text-white mb-2">
+          {$_('footer.title')}
+        </h2>
+        <p class="text-sm">
+          {$_('footer.subtitle')}
+        </p>
       </div>
       
       <div class="flex space-x-6">
-        <a href="/flash" class="hover:text-white transition-colors">Envoyer</a>
-        <a href="/legal/about" class="hover:text-white transition-colors">À propos</a>
-        <a href="/legal/privacy" class="hover:text-white transition-colors">Confidentialité</a>
-        <a href="/legal/contact" class="hover:text-white transition-colors">Contact</a>
+        <a href="/flash" class="hover:text-white transition-colors">
+          {$_('footer.links.send')}
+        </a>
+        <a href="/legal/about" class="hover:text-white transition-colors">
+          {$_('footer.links.about')}
+        </a>
+        <a href="/legal/privacy" class="hover:text-white transition-colors">
+          {$_('footer.links.privacy')}
+        </a>
+        <a href="/legal/contact" class="hover:text-white transition-colors">
+          {$_('footer.links.contact')}
+        </a>
       </div>
     </div>
     
     <div class="border-t border-gray-800 pt-8">
       <div class="flex flex-col md:flex-row justify-between items-center">
-        <p class="text-sm mb-4 md:mb-0">&copy; {new Date().getFullYear()} FlashPass. Tous droits réservés.</p>
+        <p class="text-sm mb-4 md:mb-0">&copy; {new Date().getFullYear()} {$_('footer.allrights')}</p>
         <div class="flex space-x-4">
           <a href="https://github.com/Naorah/flashpass" class="text-gray-400 hover:text-white transition-colors">
             <span class="sr-only">GitHub</span>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Menu from '$lib/components/home/Menu.svelte';
 	import '../app.css';
 
   let { children } = $props();
@@ -7,3 +8,5 @@
 {#if children}
   {@render children()}
 {/if}
+
+<Menu />
