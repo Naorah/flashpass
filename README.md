@@ -122,6 +122,10 @@ To run FlashPass locally, follow these steps:
    ```sh
    npm run dev
    ```
+5. Start the development P2P signaling server
+   ```
+   node src/lib/signaling.js
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
