@@ -1,71 +1,123 @@
 import { WebSocketServer } from 'ws';
 
-const wss = new WebSocketServer({ port: 4562 });
-console.log('🚀 Signaling server running on ws://localhost:4562');
+class SignalingServer {
+  constructor(port = 4562, sessionTimeout = 10 * 60 * 1000, pingInterval = 30 * 1000) {
+    this.sessions = {}; // Stocke les sessions WebRTC par ID
+    this.sessionTimeout = sessionTimeout;
+    this.pingInterval = pingInterval;
 
-const sessions = {}; // session_id: { sender, receiver, offer, answer, candidates: [] }
+    // Initialise le serveur WebSocket
+    this.wss = new WebSocketServer({ port });
+    this.wss.on('connection', this.handleConnection.bind(this));
 
-wss.on('connection', (ws, req) => {
-  const url = req.url;
-  const session_id = url.slice(1); // /abc123 => abc123
+    // Ping/Pong pour détecter les connexions mortes
+    this.pingLoop = setInterval(this.checkHeartbeats.bind(this), this.pingInterval);
 
-  if (!sessions[session_id]) {
-    sessions[session_id] = { candidates: [] };
+    this.wss.on('close', () => clearInterval(this.pingLoop));
   }
 
-  const session = sessions[session_id];
+  // Gère une nouvelle connexion WebSocket
+  handleConnection(ws, req) {
+    const sessionId = req.url.slice(1); // /abc123 → abc123
 
-  // Détermine si c'est le sender ou le receiver
-  if (!session.sender) {
-    session.sender = ws;
-    ws.role = 'sender';
-  } else {
-    session.receiver = ws;
-    ws.role = 'receiver';
-    // Si l'offer existe déjà, on le renvoie tout de suite au receiver
-    if (session.offer) {
-      session.receiver.send(JSON.stringify({
-        type: 'offer',
-        sdp: session.offer
-      }));
+    if (!this.sessions[sessionId]) {
+      this.sessions[sessionId] = {
+        candidates: [],
+        timeout: null,
+        sender: null,
+        receiver: null,
+      };
     }
 
-    // Et on envoie tous les ICE déjà reçus
-    for (const candidate of session.candidates) {
-      session.receiver.send(JSON.stringify({
-        type: 'ice',
-        candidate
-      }));
+    const session = this.sessions[sessionId];
+    this.resetSessionTimeout(sessionId);
+
+    // Marque la connexion comme vivante
+    ws.isAlive = true;
+    ws.on('pong', () => (ws.isAlive = true));
+
+    // Associe la connexion au rôle sender ou receiver
+    if (!session.sender) {
+      session.sender = ws;
+      ws.role = 'sender';
+    } else {
+      session.receiver = ws;
+      ws.role = 'receiver';
+
+      // Si l'offre est déjà reçue, l’envoyer au receiver
+      if (session.offer) {
+        session.receiver.send(JSON.stringify({ type: 'offer', sdp: session.offer }));
+      }
+
+      // Envoyer les ICE candidates déjà reçus
+      for (const candidate of session.candidates) {
+        session.receiver.send(JSON.stringify({ type: 'ice', candidate }));
+      }
     }
+
+    // Écoute les messages JSON envoyés par le client
+    ws.on('message', (message) => {
+      this.resetSessionTimeout(sessionId);
+      let data;
+      try {
+        data = JSON.parse(message);
+      } catch {
+        return; // Ignore les messages invalides
+      }
+
+      if (data.type === 'offer') {
+        session.offer = data.sdp;
+        session.receiver?.send(JSON.stringify({ type: 'offer', sdp: data.sdp }));
+
+      } else if (data.type === 'answer') {
+        session.answer = data.sdp;
+        session.sender?.send(JSON.stringify({ type: 'answer', sdp: data.sdp }));
+
+      } else if (data.type === 'ice') {
+        session.candidates.push(data.candidate);
+        const target = ws.role === 'sender' ? session.receiver : session.sender;
+        target?.send(JSON.stringify({ type: 'ice', candidate: data.candidate }));
+      }
+    });
+
+    // Quand un client ferme sa connexion
+    ws.on('close', () => {
+      if (ws.role === 'sender') session.sender = null;
+      if (ws.role === 'receiver') session.receiver = null;
+
+      // Si plus personne n'est connecté à la session, on la supprime
+      if (!session.sender && !session.receiver) {
+        clearTimeout(session.timeout);
+        delete this.sessions[sessionId];
+      }
+    });
   }
 
-  ws.on('message', (message) => {
-    const data = JSON.parse(message);
-
-    if (data.type === 'offer') {
-      session.offer = data.sdp;
-      if (session.receiver) {
-        session.receiver.send(JSON.stringify({ type: 'offer', sdp: data.sdp }));
+  // Vérifie les connexions encore actives via ping/pong
+  checkHeartbeats() {
+    this.wss.clients.forEach((ws) => {
+      if (!ws.isAlive) {
+        ws.terminate();
+        return;
       }
+      ws.isAlive = false;
+      ws.ping(); // Envoie un ping pour vérifier la connexion
+    });
+  }
 
-    } else if (data.type === 'answer') {
-      session.answer = data.sdp;
-      if (session.sender) {
-        session.sender.send(JSON.stringify({ type: 'answer', sdp: data.sdp }));
-      }
+  // Définit ou redémarre le timer de session
+  resetSessionTimeout(sessionId) {
+    const session = this.sessions[sessionId];
+    if (!session) return;
 
-    } else if (data.type === 'ice') {
-      session.candidates.push(data.candidate);
-      const target = ws.role === 'sender' ? session.receiver : session.sender;
-      if (target) {
-        target.send(JSON.stringify({ type: 'ice', candidate: data.candidate }));
-      }
-    }
+    if (session.timeout) clearTimeout(session.timeout);
+    session.timeout = setTimeout(() => {
+      session.sender?.close(4000, 'Session expired');
+      session.receiver?.close(4000, 'Session expired');
+      delete this.sessions[sessionId];
+    }, this.sessionTimeout);
+  }
+}
 
-  });
-
-  ws.on('close', () => {
-    if (ws.role === 'sender') session.sender = null;
-    if (ws.role === 'receiver') session.receiver = null;
-  });
-});
+// Lance le serveur sur le port 4562
+new SignalingServer(4562);
