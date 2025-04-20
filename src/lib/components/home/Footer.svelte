@@ -15,19 +15,23 @@
         </p>
       </div>
       
-      <div class="flex space-x-6">
-        <a href="/flash" class="hover:text-white transition-colors">
-          {$_('footer.links.send')}
-        </a>
-        <a href="/legal/about" class="hover:text-white transition-colors">
-          {$_('footer.links.about')}
-        </a>
-        <a href="/legal/privacy" class="hover:text-white transition-colors">
-          {$_('footer.links.privacy')}
-        </a>
-        <a href="/legal/contact" class="hover:text-white transition-colors">
-          {$_('footer.links.contact')}
-        </a>
+      <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+        <div class="flex space-x-6 sm:space-x-0">
+          <a href="/flash" class="hover:text-white transition-colors">
+            {$_('footer.links.send')}
+          </a>
+          <a href="/legal/about" class="hover:text-white transition-colors">
+            {$_('footer.links.about')}
+          </a>
+        </div>
+        <div class="flex space-x-6 sm:space-x-6">
+          <a href="/legal/privacy" class="hover:text-white transition-colors">
+            {$_('footer.links.privacy')}
+          </a>
+          <a href="/legal/contact" class="hover:text-white transition-colors">
+            {$_('footer.links.contact')}
+          </a>
+        </div>
       </div>
     </div>
     
