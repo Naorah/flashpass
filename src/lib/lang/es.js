@@ -86,7 +86,7 @@ export default {
   "p.flash_received": "¡La contraseña ha sido recibida!",
   "p.connected": "¡Conectado al remitente!",
   "p.connect_to_sender": "Conectando con el remitente...",
-  "p.flash_already_sent": "La contraseña ya ha sido transmitida. Imposible reenviarla de nuevo.",
+  "p.flash_already_sent": "La contraseña ya ha sido transmitida o ha expirado. Imposible recuperarla.",
 
   "flash.password": "Mensaje seguro",
   "flash.generate": "Generar un flash",
@@ -99,6 +99,7 @@ export default {
   "flash.link_to_share": "Enlace para compartir",
   "flash.waiting_for_connection": "Esperando conexión...",
   "flash.already_sent": "La contraseña se solicita por segunda vez pero ha expirado",
+  "flash.time_expired": "La contraseña ha expirado",
 
   "about.title": "Acerca de FlashPass",
   "about.description": "Descubre nuestra misión y contáctanos para cualquier pregunta.",

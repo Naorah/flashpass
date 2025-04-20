@@ -5,6 +5,8 @@
   import { _ } from '$lib/lang/i18n';
   import CryptoJS from 'crypto-js';
 
+  import Timer from '$lib/components/flash/Timer.svelte';
+
   let text_to_transmit = $state('');
   let copied = $state(false);
   let is_generating = $state(false);
@@ -13,7 +15,7 @@
   let link = $state('');
   let status = $state({status: 'pending', message: $_('flash.waiting_for_connection')});
 
-  async function sendPassword() {
+  async function generateFlash() {
     is_generating = true;
     link = '';
     session_id = crypto.randomUUID();
@@ -33,7 +35,7 @@
 
   async function handleKeydown(event) {
     if (event.key === 'Enter') {
-      await sendPassword();
+      await generateFlash();
     }
   }
   
@@ -172,7 +174,7 @@
         </div>
 
         <button 
-          onclick={sendPassword} 
+          onclick={generateFlash} 
           class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors flex items-center justify-center space-x-2"
           disabled={is_generating}
         >
@@ -229,6 +231,11 @@
               <p class="text-red-600 dark:text-red-400 text-xs mt-1 animate-pulse">{status.message}</p>
             {:else}
               <p class="text-gray-600 dark:text-gray-400 text-xs mt-1 animate-pulse">{status.message}</p>
+            {/if}
+            {#if status.status === 'connected'}
+              <Timer duration={60*10} on:timer_end={() => {
+                status = {status: 'error', message: $_('flash.time_expired')};
+              }} />
             {/if}
           </div>
 

@@ -86,7 +86,7 @@ export default {
   "p.flash_received": "Das Passwort wurde empfangen!",
   "p.connected": "Mit dem Sender verbunden!",
   "p.connect_to_sender": "Verbindung zum Sender wird hergestellt...",
-  "p.flash_already_sent": "Das Passwort wurde bereits übermittelt. Es kann nicht erneut gesendet werden.",
+  "p.flash_already_sent": "Das Passwort wurde bereits übermittelt oder abgelaufen. Es kann nicht erneut abgerufen werden.",
 
   "flash.password": "Sichere Nachricht",
   "flash.generate": "Flash generieren",
@@ -99,6 +99,7 @@ export default {
   "flash.link_to_share": "Link zum Teilen",
   "flash.waiting_for_connection": "Warten auf Verbindung...",
   "flash.already_sent": "Das Passwort wird ein zweites Mal angefordert, ist aber abgelaufen",
+  "flash.time_expired": "Das Passwort ist abgelaufen",
 
   "about.title": "Über FlashPass",
   "about.description": "Erfahren Sie mehr über unsere Mission und kontaktieren Sie uns bei Fragen.",
