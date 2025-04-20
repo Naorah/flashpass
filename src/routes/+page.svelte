@@ -16,7 +16,7 @@
   <meta name="description" content="FlashPass vous permet de partager des mots de passe de façon sécurisée, chiffrée et éphémère via une connexion P2P." />
 </svelte:head>
 
-<main class="overflow-x-hidden">
+<main>
   <Hero />
   <Problem />
   <Avantage />
