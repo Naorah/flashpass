@@ -26,7 +26,7 @@
   onclick={() => flash_enabled = !flash_enabled} 
   aria-label="Toggle flash"
 ></button> -->
-<section class="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 dark:from-indigo-900 dark:to-purple-900 flex flex-col items-center justify-center px-4 py-16 text-white relative">
+<section class="h-lvh bg-gradient-to-br from-indigo-500 to-purple-600 dark:from-indigo-900 dark:to-purple-900 flex flex-col items-center justify-center px-4 py-16 text-white relative">
   <!-- <LightningOverlay storm_intensity={7} flash_power={0.5} min_delay={50} max_delay={1500} bind:flash_enabled={flash_enabled} /> -->
   
   {#if visible}
