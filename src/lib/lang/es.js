@@ -174,6 +174,18 @@ export default {
   "contact.FAQ.i_want_more": "¡Quiero algo más!",
   "contact.FAQ.i_want_more_description": "No dudes en contactarnos, te responderemos lo antes posible.",
 
+  "instruction_modal.title": "Instrucciones importantes",
+  "instruction_modal.direct_sharing": "Partido directo",
+  "instruction_modal.direct_sharing_description": "Comparte el enlace directamente con la persona que necesitas",
+  "instruction_modal.unique_usage": "Uso único",
+  "instruction_modal.unique_usage_description": "El mensaje solo puede ser leído una vez a través del enlace",
+  "instruction_modal.p2p_connection": "Conexión P2P",
+  "instruction_modal.p2p_connection_description": "El enlace debe permanecer abierto durante el partido",
+  "instruction_modal.auto_expire": "Expiración automática",
+  "instruction_modal.auto_expire_description": "La conexión se cierra después de 10 minutos por razones de seguridad",
+  "instruction_modal.no_repeat": "No volver a mostrar estas instrucciones",
+  "instruction_modal.understood": "He entendido",
+
   "misc.title": "FlashPass",
   "misc.crypt": "Cifrado",
   "misc.expire_after_reading": "Expira después de la lectura",

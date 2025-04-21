@@ -174,6 +174,18 @@ export default {
   "contact.FAQ.i_want_more": "Je veux quelque chose de plus !",
   "contact.FAQ.i_want_more_description": "N'hésitez pas à nous contacter, nous vous répondrons dans les plus brefs délais.",
 
+  "instruction_modal.title": "Instructions importantes",
+  "instruction_modal.direct_sharing": "Partage direct",
+  "instruction_modal.direct_sharing_description": "Partagez le lien directement avec la personne concernée",
+  "instruction_modal.unique_usage": "Usage unique",
+  "instruction_modal.unique_usage_description": "Le message est lisible une seule fois via le lien",
+  "instruction_modal.p2p_connection": "Connexion P2P",
+  "instruction_modal.p2p_connection_description": "L'onglet doit rester ouvert pendant le partage",
+  "instruction_modal.auto_expire": "Expiration automatique",
+  "instruction_modal.auto_expire_description": "La connexion expire après 10 minutes pour des raisons de sécurité",
+  "instruction_modal.no_repeat": "Ne plus afficher ces instructions",
+  "instruction_modal.understood": "J'ai compris",
+
   "misc.title": "FlashPass",
   "misc.crypt": "Chiffré",
   "misc.expire_after_reading": "Expire après lecture",

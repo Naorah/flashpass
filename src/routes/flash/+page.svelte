@@ -5,8 +5,11 @@
   import { _ } from '$lib/lang/i18n';
   import CryptoJS from 'crypto-js';
 
+  // ########## COMPONENTS ##########
   import Timer from '$lib/components/flash/Timer.svelte';
+  import InstructionModal from '$lib/components/flash/InstructionModal.svelte';
 
+  // ########## STATE ##########
   let text_to_transmit = $state('');
   let copied = $state(false);
   let is_generating = $state(false);
@@ -20,7 +23,12 @@
     link = '';
     session_id = crypto.randomUUID();
     shared_key = crypto.randomUUID();
-    startSignaling();
+    try {
+      startSignaling();
+    } catch (err) {
+      status = {status: 'error', message: $_('flash.error_generating')};
+    }
+    instruction_modal_visible = true;
     link = `${location.origin}/p/${session_id}#${shared_key}`;
     is_generating = false;
   }
@@ -141,6 +149,11 @@
   onMount(() => {
     visible = true;
   });
+
+  // ########## INSTRUCTION MODAL ##########
+
+  let instruction_modal_visible = $state(false);
+
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 dark:from-indigo-900 dark:to-purple-900 flex items-center justify-center p-4">
@@ -270,3 +283,8 @@
     </div>
   {/if}
 </div>
+
+{#if channel}
+  <InstructionModal />
+{/if}
+
