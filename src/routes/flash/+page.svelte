@@ -16,7 +16,7 @@
   let session_id = $state('');
   let shared_key = $state('');
   let link = $state('');
-  let status = $state({status: 'pending', message: $_('flash.waiting_for_connection')});
+  let status = $state({status: 'pending', message: 'flash.waiting_for_connection'});
 
   async function generateFlash() {
     is_generating = true;
@@ -26,7 +26,7 @@
     try {
       startSignaling();
     } catch (err) {
-      status = {status: 'error', message: $_('flash.error_generating')};
+      status = {status: 'error', message: 'flash.error_generating'};
     }
     instruction_modal_visible = true;
     link = `${location.origin}/p/${session_id}#${shared_key}`;
@@ -92,7 +92,7 @@
         session: session_id,
         sdp: offer
       }));
-      status = {status: 'connected', message: $_('flash.ready_to_send')}
+      status = {status: 'connected', message: 'flash.ready_to_send'}
     };
 
     /**
@@ -107,10 +107,10 @@
           if (peer.signalingState === "have-local-offer") {
             await peer.setRemoteDescription(new RTCSessionDescription(data.sdp));
           } else {
-            status = {status: 'error', message: $_('flash.already_sent')};
+            status = {status: 'error', message: 'flash.already_sent'};
           }
         } catch (err) {
-          status = {status: 'error', message: $_('flash.already_sent')};
+          status = {status: 'error', message: 'flash.already_sent'};
         }
       }
 
@@ -131,7 +131,7 @@
       const data = JSON.parse(event.data);
 
       if (data.session && data.type && data.type === 'get-flash' && data.session === session_id) {
-        status = {status: 'connected', message: $_('flash.flash_sent')}
+        status = {status: 'connected', message: 'flash.flash_sent'}
         const encryptedMessage = CryptoJS.AES.encrypt(text_to_transmit, shared_key).toString();
         channel.send(JSON.stringify({
           type: 'send-flash',
@@ -239,15 +239,15 @@
             </div>
 
             {#if status.status === 'connected'}
-              <p class="text-green-600 dark:text-green-400 text-xs mt-1 animate-pulse">{status.message}</p>
+              <p class="text-green-600 dark:text-green-400 text-xs mt-1 animate-pulse">{$_(status.message)}</p>
             {:else if status.status === 'error'}
-              <p class="text-red-600 dark:text-red-400 text-xs mt-1 animate-pulse">{status.message}</p>
+              <p class="text-red-600 dark:text-red-400 text-xs mt-1 animate-pulse">{$_(status.message)}</p>
             {:else}
-              <p class="text-gray-600 dark:text-gray-400 text-xs mt-1 animate-pulse">{status.message}</p>
+              <p class="text-gray-600 dark:text-gray-400 text-xs mt-1 animate-pulse">{$_(status.message)}</p>
             {/if}
             {#if status.status === 'connected'}
               <Timer duration={60*10} on:timer_end={() => {
-                status = {status: 'error', message: $_('flash.time_expired')};
+                status = {status: 'error', message: 'flash.time_expired'};
               }} />
             {/if}
           </div>

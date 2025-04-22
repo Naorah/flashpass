@@ -16,7 +16,7 @@
       </div>
       
       <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
-        <div class="flex space-x-6 sm:space-x-0">
+        <div class="flex space-x-6 sm:space-x-6">
           <a href="/flash" class="hover:text-white transition-colors">
             {$_('footer.links.send')}
           </a>
